@@ -1,0 +1,56 @@
+[
+  {
+    "id": "svc_periodic",
+    "title": "Periodic Service",
+    "icon": "build",
+    "price": 2499,
+    "duration_mins": 120,
+    "short": "Engine oil, filter, general checkup",
+    "details": "Full periodic maintenance incl. engine oil, oil filter, cabin filter check, coolant top-up, battery health, brake cleaning."
+  },
+  {
+    "id": "svc_ac",
+    "title": "AC Service",
+    "icon": "ac_unit",
+    "price": 1499,
+    "duration_mins": 90,
+    "short": "AC gas & cooling check",
+    "details": "AC gas top-up, leak test, cabin filter clean/replace, evaporator cleaning."
+  },
+  {
+    "id": "svc_tyre",
+    "title": "Tyre & Wheel Care",
+    "icon": "tire_repair",
+    "price": 999,
+    "duration_mins": 60,
+    "short": "Alignment, balancing, rotation",
+    "details": "Wheel alignment and balancing, tyre rotation, tread inspection."
+  },
+  {
+    "id": "svc_battery",
+    "title": "Battery Replacement",
+    "icon": "battery_charging_full",
+    "price": 3499,
+    "duration_mins": 45,
+    "short": "OEM battery + fitment",
+    "details": "Compatible OEM battery with installation and testing."
+  },
+  {
+    "id": "svc_spa",
+    "title": "Car Spa & Cleaning",
+    "icon": "cleaning_services",
+    "price": 1199,
+    "duration_mins": 75,
+    "short": "Interior + exterior deep clean",
+    "details": "Foam wash, interior vacuum, dashboard polish, tyre dressing."
+  },
+  {
+    "id": "svc_custom",
+    "title": "Custom Repairs",
+    "icon": "miscellaneous_services",
+    "price": 0,
+    "duration_mins": 0,
+    "short": "Inspection & estimate",
+    "details": "Mechanic inspects and provides a repair estimate."
+  }
+]
