@@ -1,15 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
+import 'state/app_state.dart';
 import 'screens/home_screen.dart';
 import 'screens/services_screen.dart';
 import 'screens/bookings_screen.dart';
 import 'screens/my_cars_screen.dart';
 import 'screens/profile_screen.dart';
-import 'state/app_state.dart';
+import 'screens/login_screen.dart';
+import 'screens/register_screen.dart';
+import 'screens/root_screen.dart';
 
-void main() => runApp(const MyApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  runApp(const MyApp());
+}
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -30,14 +39,48 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         title: 'GoMechanic',
         theme: _theme(),
-        home: const _Root(),
+        home: const RootScreen(),
       ),
     );
   }
 }
 
+class RootScreen extends StatefulWidget {
+  const RootScreen({super.key});
+
+  @override
+  State<RootScreen> createState() => _RootScreenState();
+}
+
+class _RootScreenState extends State<RootScreen> {
+  User? _user;
+
+  @override
+  void initState() {
+    super.initState();
+    _user = FirebaseAuth.instance.currentUser;
+
+    if (_user == null) {
+      Future.microtask(() {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (_) => LoginScreen()),
+        );
+      });
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (_user == null) {
+      return const SizedBox.shrink();
+    }
+    return const _Root();
+  }
+}
+
 class _Root extends StatefulWidget {
-  const _Root();
+  const _Root({super.key});
 
   @override
   State<_Root> createState() => _RootState();
