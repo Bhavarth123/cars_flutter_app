@@ -3,6 +3,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 
 import 'state/app_state.dart';
 import 'screens/home_screen.dart';
@@ -12,11 +14,56 @@ import 'screens/my_cars_screen.dart';
 import 'screens/profile_screen.dart';
 import 'screens/login_screen.dart';
 import 'screens/register_screen.dart';
-import 'screens/root_screen.dart';
 
-void main() async {
+class GarageLocationScreen extends StatelessWidget {
+  const GarageLocationScreen({super.key});
+
+  final LatLng garageLocation = const LatLng(22.2686216, 70.8006619);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text("Garage Location")),
+      body: GoogleMap(
+        initialCameraPosition: CameraPosition(
+          target: garageLocation,
+          zoom: 16,
+        ),
+        markers: {
+          Marker(
+            markerId: const MarkerId('garage'),
+            position: garageLocation,
+            infoWindow: const InfoWindow(title: "Jay Chamunda Motors"),
+          ),
+        },
+      ),
+    );
+  }
+}
+
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+
+  // Initialize Firebase Messaging
+  FirebaseMessaging messaging = FirebaseMessaging.instance;
+
+  // Request notification permissions (iOS)
+  await messaging.requestPermission(
+    alert: true,
+    badge: true,
+    sound: true,
+  );
+
+  // Get FCM token
+  String? token = await messaging.getToken();
+  print("FCM Token: $token");
+
+  // Foreground messages
+  FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+    print("Push notification received: ${message.notification?.title}");
+  });
+
   runApp(const MyApp());
 }
 
@@ -45,6 +92,9 @@ class MyApp extends StatelessWidget {
   }
 }
 
+/// =====================
+/// ROOT SCREEN
+/// =====================
 class RootScreen extends StatefulWidget {
   const RootScreen({super.key});
 
@@ -79,6 +129,9 @@ class _RootScreenState extends State<RootScreen> {
   }
 }
 
+/// =====================
+/// ROOT NAVIGATION
+/// =====================
 class _Root extends StatefulWidget {
   const _Root({super.key});
 
@@ -95,6 +148,7 @@ class _RootState extends State<_Root> {
     BookingsScreen(),
     MyCarsScreen(),
     ProfileScreen(),
+    GarageLocationScreen(),
   ];
 
   @override
@@ -129,6 +183,11 @@ class _RootState extends State<_Root> {
             icon: Icon(Icons.person_outline),
             selectedIcon: Icon(Icons.person),
             label: 'Profile',
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.location_on_outlined),
+            selectedIcon: Icon(Icons.location_on),
+            label: 'Garage',
           ),
         ],
       ),
